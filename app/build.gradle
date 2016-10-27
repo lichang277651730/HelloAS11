@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+
+    signingConfigs {
+        debug{
+
+        }
+        release {
+            keyAlias 'helloas'
+            keyPassword '123456'
+            storeFile file('F:/keyfile/helloas.jks')
+            storePassword '123456'
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.example.administrator.helloas"
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        debug{
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    //多渠道打包
+    productFlavors{
+        lichang{} //官方
+        share{}//分享推荐下载
+        web{}//web引导下载
+        appweb{}//web引导下载
+        activity1{}//活动1
+        hello{}
+        productFlavors.all{ flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile files('libs/QQShare1.jar')
+    compile files('libs/QQShare2.jar')
+    compile files('libs/WBShare.jar')
+    compile files('libs/wx_sdk.jar')
+}
